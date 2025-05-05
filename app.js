@@ -491,3 +491,6 @@ if (process.env.NODE_ENV !== 'production') {
         console.log(`初始等待: ${INITIAL_WAIT_MS}ms, 重试等待: ${RETRY_WAIT_MS}ms`);
     });
 }
+
+// 添加 Vercel 导出
+export default app;
