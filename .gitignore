@@ -1,0 +1,42 @@
+# 环境变量文件
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# 依赖目录
+node_modules/
+
+# 日志文件
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 运行时数据
+.pnp.*
+.npm
+.yarn
+.yarn-integrity
+
+# IDE 文件
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# 构建输出
+dist/
+build/
+out/
+
+# 其他临时文件
+*.pid
+*.seed
+*.pid.lock
+.lock-wscript
+.eslintcache
