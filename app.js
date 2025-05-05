@@ -473,19 +473,21 @@ app.get('*', async (req, res) => {
 });
 
 // 启动服务器
-app.listen(SERVER_PORT, () => {
-    console.log(`服务器运行在端口 ${SERVER_PORT}`);
-    console.log(`已配置 ${ROUTES_CONFIG.length} 条线路`);
-    console.log("可用线路:");
-    
-    ROUTES_CONFIG.forEach(route => {
-        const baseUrl = `http://localhost:${SERVER_PORT}${route.suffix ? '/'+route.suffix : ''}`;
-        console.log(`- 线路 ${route.id}: ${baseUrl}`);
-        console.log(`  API地址: ${route.api_url}`);
-        console.log(`  上传路径: ${route.upload_path}`);
-        console.log(`  绝对路径: ${route.absolute_path || '(无)'}`);
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(SERVER_PORT, () => {
+        console.log(`服务器运行在端口 ${SERVER_PORT}`);
+        console.log(`已配置 ${ROUTES_CONFIG.length} 条线路`);
+        console.log("可用线路:");
+        
+        ROUTES_CONFIG.forEach(route => {
+            const baseUrl = `http://localhost:${SERVER_PORT}${route.suffix ? '/'+route.suffix : ''}`;
+            console.log(`- 线路 ${route.id}: ${baseUrl}`);
+            console.log(`  API地址: ${route.api_url}`);
+            console.log(`  上传路径: ${route.upload_path}`);
+            console.log(`  绝对路径: ${route.absolute_path || '(无)'}`);
+        });
+        
+        console.log(`调试模式: ${DEBUG_MODE ? '启用' + (DEBUG_VERBOSE ? ' (详细)' : '') : '禁用'}`);
+        console.log(`初始等待: ${INITIAL_WAIT_MS}ms, 重试等待: ${RETRY_WAIT_MS}ms`);
     });
-    
-    console.log(`调试模式: ${DEBUG_MODE ? '启用' + (DEBUG_VERBOSE ? ' (详细)' : '') : '禁用'}`);
-    console.log(`初始等待: ${INITIAL_WAIT_MS}ms, 重试等待: ${RETRY_WAIT_MS}ms`);
-});
+}
