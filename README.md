@@ -23,6 +23,18 @@
 
 4. 在Mixfile中将上传线路更改为自定义线路，并填写请求地址为`URL/SUFFIX`，例如：`http://192.168.1.101:5001/line1secret`
 
+## Vercel
+
+1. Fork此项目
+
+2. 登录[Vercel](https://vercel.com/)，创建Project，连接Github，选择此项目
+
+3. 填写所需环境变量并部署
+
+4. 绑定域名：Settings - Domains - Add Domain，如 `mf.example.com`，则线路1为 `https://mf.example.com/line1secret`
+
+5. 更新：仓库右上方`Sync fork`，自动部署
+
 ## 说明
 
 image为图片,可自定义逻辑返回自定义图片,可返回随机图片(一个文件上传时只会访问一次图片)

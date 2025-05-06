@@ -342,18 +342,37 @@ async function handleFileUpload(req, res, route) {
             return res.status(400).send('No file content received');
         }
         
-        // 生成唯一文件名
-        const timestamp = Date.now();
+        // 获取当前日期时间，并格式化为可读的日期时间和目录结构
+        const now = new Date();
+        const year = now.getFullYear().toString();
+        const month = (now.getMonth() + 1).toString().padStart(2, '0');
+        const day = now.getDate().toString().padStart(2, '0');
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        const seconds = now.getSeconds().toString().padStart(2, '0');
+        
+        // 创建目录路径: YYYY/MM/DD/
+        const directoryPath = `${year}/${month}/${day}/`;
+        
+        // 创建文件名: YYMMDDHHMMSS_随机字符.gif
+        const dateTimeString = `${year.slice(-2)}${month}${day}${hours}${minutes}${seconds}`;
         const randomStr = Math.random().toString(36).substring(2, 8);
-        const filename = `upload_${timestamp}_${randomStr}.gif`;
+        const filename = `${dateTimeString}_${randomStr}.gif`;
         
         debugLog(`线路 ${route.id} 生成文件名: ${filename}`);
+        debugLog(`线路 ${route.id} 目录路径: ${directoryPath}`);
         
         // 获取认证 token
         const token = await getAlistToken(route);
         
-        // 准备文件上传路径
-        const filePath = `${route.upload_path}${filename}`;
+        // 准备文件上传路径，确保路径以/开头且结尾不带/
+        let basePath = route.upload_path;
+        if (!basePath.endsWith('/')) {
+            basePath += '/';
+        }
+        
+        // 组合完整路径
+        const filePath = `${basePath}${directoryPath}${filename}`;
         const encodedFilePath = encodeURIComponent(filePath);
         
         debugLog(`线路 ${route.id} 上传路径: ${filePath}`);
@@ -371,7 +390,9 @@ async function handleFileUpload(req, res, route) {
                     'Authorization': token,
                     'File-Path': encodedFilePath,
                     'Content-Type': 'application/octet-stream',
-                    'Content-Length': fileContent.length.toString()
+                    'Content-Length': fileContent.length.toString(),
+                    'As-Task': 'false', // 设置为false以便同步上传，避免异步任务的复杂性
+                    'Create-Dir': 'true' // 自动创建目录
                 }
             }
         );
